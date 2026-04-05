@@ -4,6 +4,12 @@ import { findDuplicateMatch } from '../domain/matchers';
 import { normalizeDoi, normalizeIsbn, normalizeUrl } from '../domain/normalize';
 import type { DuplicateMatch, Reference } from '../domain/types';
 
+export type IdentifierKey = 'url' | 'doi' | 'isbn';
+
+type IdentifierValueMap = Record<IdentifierKey, string>;
+type NormalizedValueMap = Record<IdentifierKey, string | null>;
+type IdentifierMatchMap = Record<IdentifierKey, DuplicateMatch | null>;
+
 export interface DuplicateCheckState {
   url: string;
   doi: string;
@@ -12,10 +18,14 @@ export interface DuplicateCheckState {
   normalizedDoi: string | null;
   normalizedIsbn: string | null;
   hasAnyInput: boolean;
-  match: DuplicateMatch | null;
+  hasAnyDuplicate: boolean;
+  valuesByIdentifier: IdentifierValueMap;
+  normalizedByIdentifier: NormalizedValueMap;
+  matchesByIdentifier: IdentifierMatchMap;
   setUrl: (value: string) => void;
   setDoi: (value: string) => void;
   setIsbn: (value: string) => void;
+  resetInputs: () => void;
 }
 
 export function useDuplicateCheck(references: Reference[]): DuplicateCheckState {
@@ -32,18 +42,39 @@ export function useDuplicateCheck(references: Reference[]): DuplicateCheckState 
     [url, doi, isbn],
   );
 
-  const match = useMemo(() => {
-    if (!hasAnyInput) return null;
+  const valuesByIdentifier = useMemo<IdentifierValueMap>(
+    () => ({ url, doi, isbn }),
+    [doi, isbn, url],
+  );
 
-    return findDuplicateMatch(
-      {
-        url,
-        doi,
-        isbn,
-      },
-      references,
-    );
-  }, [doi, hasAnyInput, isbn, references, url]);
+  const normalizedByIdentifier = useMemo<NormalizedValueMap>(
+    () => ({
+      url: normalizedUrl,
+      doi: normalizedDoi,
+      isbn: normalizedIsbn,
+    }),
+    [normalizedDoi, normalizedIsbn, normalizedUrl],
+  );
+
+  const matchesByIdentifier = useMemo<IdentifierMatchMap>(
+    () => ({
+      url: url.trim() ? findDuplicateMatch({ url }, references) : null,
+      doi: doi.trim() ? findDuplicateMatch({ doi }, references) : null,
+      isbn: isbn.trim() ? findDuplicateMatch({ isbn }, references) : null,
+    }),
+    [doi, isbn, references, url],
+  );
+
+  const hasAnyDuplicate = useMemo(
+    () => Object.values(matchesByIdentifier).some((match) => Boolean(match?.found)),
+    [matchesByIdentifier],
+  );
+
+  const resetInputs = () => {
+    setUrl('');
+    setDoi('');
+    setIsbn('');
+  };
 
   return {
     url,
@@ -53,9 +84,13 @@ export function useDuplicateCheck(references: Reference[]): DuplicateCheckState 
     normalizedDoi,
     normalizedIsbn,
     hasAnyInput,
-    match,
+    hasAnyDuplicate,
+    valuesByIdentifier,
+    normalizedByIdentifier,
+    matchesByIdentifier,
     setUrl,
     setDoi,
     setIsbn,
+    resetInputs,
   };
 }

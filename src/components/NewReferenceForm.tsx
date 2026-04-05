@@ -22,10 +22,14 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
     normalizedDoi,
     normalizedIsbn,
     hasAnyInput,
-    match,
+    hasAnyDuplicate,
+    valuesByIdentifier,
+    normalizedByIdentifier,
+    matchesByIdentifier,
     setUrl,
     setDoi,
     setIsbn,
+    resetInputs,
   } = useDuplicateCheck(references);
 
   useEffect(() => {
@@ -35,6 +39,11 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
   return (
     <div>
       <form className="new-reference-form" onSubmit={(event) => event.preventDefault()}>
+        <p className="form-lead">
+          Paste one or more identifiers. Matching runs as you type and keeps the entry local to
+          this demo.
+        </p>
+
         <label htmlFor="new-reference-url">URL</label>
         <input
           id="new-reference-url"
@@ -43,6 +52,7 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
           placeholder="https://example.org/article"
           value={url}
           onChange={(event) => setUrl(event.target.value)}
+          aria-invalid={Boolean(url.trim() && !normalizedUrl)}
         />
 
         <label htmlFor="new-reference-doi">DOI</label>
@@ -53,6 +63,7 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
           placeholder="10.xxxx/xxxxx"
           value={doi}
           onChange={(event) => setDoi(event.target.value)}
+          aria-invalid={Boolean(doi.trim() && !normalizedDoi)}
         />
 
         <label htmlFor="new-reference-isbn">ISBN</label>
@@ -63,13 +74,26 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
           placeholder="978-0-00-000000-0"
           value={isbn}
           onChange={(event) => setIsbn(event.target.value)}
+          aria-invalid={Boolean(isbn.trim() && !normalizedIsbn)}
         />
-      </form>
-
-      <section className="match-section" aria-live="polite">
-        <h3>Current match state</h3>
 
         {hasAnyInput ? (
+          <div className="form-actions">
+            <button
+              type="button"
+              className="action-button action-button-ghost"
+              onClick={resetInputs}
+            >
+              Clear all fields
+            </button>
+          </div>
+        ) : null}
+      </form>
+
+      {hasAnyInput ? (
+        <section className="match-section" aria-live="polite">
+          <h3>Current match state</h3>
+
           <div className="normalized-preview">
             <p>
               <strong>Normalized URL:</strong> {normalizedUrl ?? 'Invalid or empty'}
@@ -81,31 +105,71 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
               <strong>Normalized ISBN:</strong> {normalizedIsbn ?? 'Invalid or empty'}
             </p>
           </div>
-        ) : null}
 
-        {!hasAnyInput ? (
-          <div className="match-state">Enter a URL, DOI, or ISBN to check duplicates.</div>
-        ) : null}
+          <div className="identifier-results">
+            {(
+              [
+                ['url', 'URL'],
+                ['doi', 'DOI'],
+                ['isbn', 'ISBN'],
+              ] as const
+            ).map(([key, label]) => {
+              const fieldValue = valuesByIdentifier[key];
+              const normalizedValue = normalizedByIdentifier[key];
+              const match = matchesByIdentifier[key];
 
-        {hasAnyInput && match?.found ? (
+              if (!fieldValue.trim()) {
+                return (
+                  <article className="identifier-result" key={key}>
+                    <h4>{label} result</h4>
+                    <div className="match-state">Not provided.</div>
+                  </article>
+                );
+              }
+
+              if (!normalizedValue) {
+                return (
+                  <article className="identifier-result" key={key}>
+                    <h4>{label} result</h4>
+                    <div className="match-state match-state-warning">
+                      Invalid {label} format. Update this field to run duplicate checks.
+                    </div>
+                  </article>
+                );
+              }
+
+              return (
+                <article className="identifier-result" key={key}>
+                  <h4>{label} result</h4>
+                  {match?.found ? (
+                    <>
+                      <DuplicateAlert matchType={match.matchType} />
+                      <MatchDetailsCard match={match} />
+                    </>
+                  ) : (
+                    <div className="match-state match-state-clear">No duplicate found.</div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+
+          {hasAnyDuplicate ? (
           <>
-            <DuplicateAlert matchType={match.matchType} />
-            <MatchDetailsCard match={match} />
-
             <div className="action-row">
               <button
                 type="button"
                 className="action-button action-button-primary"
                 onClick={() => setSubmissionMode('reuse-existing')}
               >
-                Reuse Existing
+                Reuse existing reference
               </button>
               <button
                 type="button"
                 className="action-button action-button-warning"
                 onClick={() => setSubmissionMode('create-new-anyway')}
               >
-                Create New Anyway
+                Create new anyway
               </button>
             </div>
 
@@ -121,12 +185,15 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
               </div>
             ) : null}
           </>
-        ) : null}
+          ) : null}
 
-        {hasAnyInput && match && !match.found ? (
-          <div className="match-state match-state-clear">No duplicate found.</div>
-        ) : null}
-      </section>
+          {!hasAnyDuplicate ? (
+            <div className="match-state match-state-muted">
+              No duplicates detected across the valid identifiers entered.
+            </div>
+          ) : null}
+        </section>
+      ) : null}
     </div>
   );
 }

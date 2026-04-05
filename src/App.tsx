@@ -10,9 +10,9 @@ function App() {
         <p className="app-kicker">Wikimedia Outreachy Wishlist #3</p>
         <h1>Duplicate Reference Prototype</h1>
         <p className="app-description">
-          This prototype explores how editors can spot duplicate references while adding
-          citations. The UI below shows an article&rsquo;s existing references and a draft
-          input area for a new reference.
+          A standalone interaction demo for checking whether a citation is already in the
+          article. Enter URL, DOI, or ISBN and review the suggested action before adding a
+          new reference.
         </p>
       </header>
 
