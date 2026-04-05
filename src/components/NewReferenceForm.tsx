@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { DuplicateAlert } from './DuplicateAlert';
 import { MatchDetailsCard } from './MatchDetailsCard';
 import { useDuplicateCheck } from '../hooks/useDuplicateCheck';
@@ -7,7 +9,11 @@ interface NewReferenceFormProps {
   references: Reference[];
 }
 
+type SubmissionMode = 'idle' | 'reuse-existing' | 'create-new-anyway';
+
 export function NewReferenceForm({ references }: NewReferenceFormProps) {
+  const [submissionMode, setSubmissionMode] = useState<SubmissionMode>('idle');
+
   const {
     url,
     doi,
@@ -21,6 +27,10 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
     setDoi,
     setIsbn,
   } = useDuplicateCheck(references);
+
+  useEffect(() => {
+    setSubmissionMode('idle');
+  }, [url, doi, isbn]);
 
   return (
     <div>
@@ -81,6 +91,35 @@ export function NewReferenceForm({ references }: NewReferenceFormProps) {
           <>
             <DuplicateAlert matchType={match.matchType} />
             <MatchDetailsCard match={match} />
+
+            <div className="action-row">
+              <button
+                type="button"
+                className="action-button action-button-primary"
+                onClick={() => setSubmissionMode('reuse-existing')}
+              >
+                Reuse Existing
+              </button>
+              <button
+                type="button"
+                className="action-button action-button-warning"
+                onClick={() => setSubmissionMode('create-new-anyway')}
+              >
+                Create New Anyway
+              </button>
+            </div>
+
+            {submissionMode === 'reuse-existing' ? (
+              <div className="match-state match-state-success">
+                Existing reference would be reused in this citation flow.
+              </div>
+            ) : null}
+
+            {submissionMode === 'create-new-anyway' ? (
+              <div className="match-state match-state-warning-confirmed">
+                Warning acknowledged. A new reference would still be created for this entry.
+              </div>
+            ) : null}
           </>
         ) : null}
 

@@ -186,6 +186,52 @@ body {
   color: #20482b;
 }
 
+.match-state-success {
+  border-color: #75b988;
+  background: #eaf8ee;
+  color: #1f472a;
+}
+
+.match-state-warning-confirmed {
+  border-color: #d8a154;
+  background: #fff9ee;
+  color: #704707;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.action-button {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action-button-primary {
+  background: #1f6ecf;
+  color: #ffffff;
+}
+
+.action-button-primary:hover {
+  background: #1859a8;
+}
+
+.action-button-warning {
+  background: #fff4e0;
+  color: #7c4c05;
+  border-color: #e9c48d;
+}
+
+.action-button-warning:hover {
+  background: #ffe9c9;
+}
+
 .match-details {
   border: 1px solid #e0e8f2;
   border-radius: 8px;
