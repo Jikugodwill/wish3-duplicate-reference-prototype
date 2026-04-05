@@ -1,0 +1,143 @@
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  color: #14212f;
+  background: #f4f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.app-header {
+  margin-bottom: 1.5rem;
+}
+
+.app-kicker {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #48617d;
+}
+
+.app-header h1 {
+  margin: 0.3rem 0 0.6rem;
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.3rem);
+  color: #0f1d2b;
+}
+
+.app-description {
+  max-width: 70ch;
+  margin: 0;
+  color: #32485f;
+}
+
+.app-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #dbe5f0;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(15, 29, 43, 0.05);
+}
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.reference-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.reference-item {
+  border: 1px solid #e2eaf3;
+  border-radius: 10px;
+  padding: 0.8rem;
+  background: #fbfdff;
+}
+
+.reference-item h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.reference-meta {
+  margin: 0.2rem 0;
+  font-size: 0.92rem;
+}
+
+.reference-identifiers {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.reference-identifiers p {
+  margin: 0.2rem 0;
+  overflow-wrap: anywhere;
+}
+
+.reference-identifiers a {
+  color: #1254a1;
+}
+
+.new-reference-form {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.new-reference-form label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #2d4158;
+}
+
+.new-reference-form input {
+  width: 100%;
+  border: 1px solid #c8d6e6;
+  border-radius: 8px;
+  padding: 0.6rem 0.65rem;
+  font: inherit;
+}
+
+.new-reference-form input:focus {
+  outline: 2px solid #9bc0f1;
+  outline-offset: 1px;
+  border-color: #9bc0f1;
+}
+
+.new-reference-form button {
+  margin-top: 0.4rem;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  background: #1f6ecf;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.new-reference-form button:hover {
+  background: #1859a8;
+}
