@@ -24,7 +24,7 @@ function App() {
 
         <div className="panel">
           <h2>Add New Reference</h2>
-          <NewReferenceForm />
+          <NewReferenceForm references={seedReferences} />
         </div>
       </section>
     </main>

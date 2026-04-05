@@ -141,3 +141,70 @@ body {
 .new-reference-form button:hover {
   background: #1859a8;
 }
+
+.match-section {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.match-section h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.normalized-preview {
+  border: 1px dashed #c9d8e9;
+  background: #f8fbff;
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-size: 0.86rem;
+}
+
+.normalized-preview p {
+  margin: 0.2rem 0;
+  overflow-wrap: anywhere;
+}
+
+.match-state {
+  border-radius: 8px;
+  border: 1px solid #d5e1ee;
+  background: #f7faff;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.match-state-duplicate {
+  border-color: #df8c7b;
+  background: #fff4f2;
+  color: #6b2318;
+}
+
+.match-state-clear {
+  border-color: #85b792;
+  background: #f2fbf4;
+  color: #20482b;
+}
+
+.match-details {
+  border: 1px solid #e0e8f2;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.match-details h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+}
+
+.match-details-title {
+  margin: 0 0 0.45rem;
+  font-weight: 700;
+}
+
+.match-details p {
+  margin: 0.22rem 0;
+  overflow-wrap: anywhere;
+}
