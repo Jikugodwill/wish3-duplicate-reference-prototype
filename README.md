@@ -1,21 +1,80 @@
-# React + TypeScript + Vite
+# Wikimedia Outreachy Wishlist #3: Duplicate Reference Prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository is a standalone interaction prototype for **Wikimedia Outreachy Wishlist #3**.  
+It demonstrates how an editor-facing workflow could detect duplicate references while a user is adding a new citation.
 
-While this project uses React, Vite supports many popular JS frameworks. [See all the supported frameworks](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
+## Problem Summary
 
-## Deploy Your Own
+When editors add references, the same source can appear multiple times in slightly different forms (different URL formatting, DOI prefixes, ISBN formatting, etc.).  
+This creates cluttered reference sections and makes article maintenance harder.
 
-Deploy your own Vite project with Vercel.
+This prototype focuses on the interaction flow for:
+- entering reference identifiers
+- normalizing user input
+- detecting likely duplicates against existing references
+- choosing what to do when a duplicate is found
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/framework-boilerplates/vite-react&template=vite-react)
+## Supported Identifiers
 
-_Live Example: https://vite-react-example.vercel.app_
+The prototype currently checks duplicates using:
+- `URL`
+- `DOI`
+- `ISBN`
 
-### Deploying From Your Terminal
+Matching priority is:
+1. DOI
+2. ISBN
+3. URL
 
-You can deploy your new Vite project with a single command from your terminal using [Vercel CLI](https://vercel.com/download):
+## Normalization (Brief)
 
-```shell
-$ vercel
+Before matching, identifiers are normalized to reduce formatting noise:
+- URL: host lowercasing, trailing slash cleanup, known tracking query param cleanup
+- DOI: strips `doi:` and `doi.org` prefixes, lowercases result
+- ISBN: removes spaces/hyphens/prefix formatting and validates ISBN-10/ISBN-13 checksum
+
+Normalization helps catch semantically identical references that are entered in different formats.
+
+## Duplicate Detection Flow
+
+1. Existing article references are shown from seed data.
+2. User types URL, DOI, and/or ISBN in the new reference form.
+3. Input is normalized reactively as the user types.
+4. Prototype checks for duplicates against existing references.
+5. UI shows current state:
+   - duplicate found (with matched reference details), or
+   - no duplicate found
+6. If duplicate is found, user can choose:
+   - **Reuse Existing**
+   - **Create New Anyway** (warning-confirmed demo state)
+
+This is frontend-only behavior for demonstration and discussion.
+
+## Setup
+
+Install dependencies:
+
+```bash
+npm install
 ```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+## Limitations
+
+- Uses static seed reference data (no backend/API)
+- No persistence of user actions
+- Matching is identifier-based only (no fuzzy title/author matching)
+- No production editor integration yet
+
+## Future Improvements
+
+- Integrate with real reference/citation storage
+- Add richer duplicate scoring and explainability
+- Add fuzzy matching for titles/authors/publication metadata
+- Track user decisions (reuse vs create new) for UX validation
+- Add end-to-end tests for editor-like workflows
