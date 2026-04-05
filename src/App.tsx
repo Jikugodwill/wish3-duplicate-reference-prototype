@@ -8,7 +8,7 @@ function App() {
     <main className="app-shell">
       <header className="app-header">
         <p className="app-kicker">Wikimedia Outreachy Wishlist #3</p>
-        <h1>Duplicate Reference Prototype</h1>
+        <h1>Wikimedia Outreachy Wishlist #3: Duplicate Reference Prototype</h1>
         <p className="app-description">
           A standalone interaction demo for checking whether a citation is already in the
           article. Enter URL, DOI, or ISBN and review the suggested action before adding a
