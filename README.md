@@ -78,3 +78,7 @@ npm run dev
 - Add fuzzy matching for titles/authors/publication metadata
 - Track user decisions (reuse vs create new) for UX validation
 - Add end-to-end tests for editor-like workflows
+
+As part of exploring the broader scope of the project, I also reviewed Wishlist #8 (Wikidata scoring support) to better understand how contribution tracking systems might be designed. I documented a short technical note outlining key challenges such as identifying relevant edits, defining scoring rules, and ensuring transparency in scoring. This helped me think more holistically about contributor workflows across the Wikimedia ecosystem.
+
+See: `notes/wishlist8-thinking.md`
